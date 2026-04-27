@@ -3,6 +3,7 @@ export interface Client {
   name: string;
   age: number;
   state: 'TX' | 'CA' | 'FL' | 'NY' | 'AZ';
+  county?: string;
   carrier: 'Aetna' | 'Humana' | 'UnitedHealthcare' | 'Wellcare' | 'Cigna';
   plan_name: string;
   enrollment_date: string;
@@ -13,29 +14,29 @@ export interface Client {
 // 23 TX-Aetna clients — the "affected cohort" for the simulation
 // urgency_score computed from days since last contact + age factor
 const AFFECTED_CLIENTS: Client[] = [
-  { id: 'c001', name: 'Dorothy Castillo', age: 78, state: 'TX', carrier: 'Aetna', plan_name: 'Aetna Medicare Eagle PPO', enrollment_date: '2023-01-15', last_contact_date: '2026-03-12', urgency_score: 94 },
-  { id: 'c002', name: 'James Nguyen', age: 82, state: 'TX', carrier: 'Aetna', plan_name: 'Aetna Medicare Eagle PPO', enrollment_date: '2022-11-01', last_contact_date: '2026-02-20', urgency_score: 91 },
-  { id: 'c003', name: 'Gloria Washington', age: 76, state: 'TX', carrier: 'Aetna', plan_name: 'Aetna Medicare Advantage HMO', enrollment_date: '2024-01-01', last_contact_date: '2026-04-05', urgency_score: 88 },
-  { id: 'c004', name: 'Robert Kim', age: 71, state: 'TX', carrier: 'Aetna', plan_name: 'Aetna Medicare Select PPO', enrollment_date: '2023-10-15', last_contact_date: '2026-05-18', urgency_score: 84 },
-  { id: 'c005', name: 'Martha Rodriguez', age: 79, state: 'TX', carrier: 'Aetna', plan_name: 'Aetna Medicare Eagle PPO', enrollment_date: '2022-03-01', last_contact_date: '2026-01-30', urgency_score: 97 },
-  { id: 'c006', name: 'William Chen', age: 68, state: 'TX', carrier: 'Aetna', plan_name: 'Aetna Medicare Advantage HMO', enrollment_date: '2025-01-01', last_contact_date: '2026-07-22', urgency_score: 72 },
-  { id: 'c007', name: 'Barbara Johnson', age: 84, state: 'TX', carrier: 'Aetna', plan_name: 'Aetna Medicare Eagle PPO', enrollment_date: '2022-07-01', last_contact_date: '2026-02-08', urgency_score: 96 },
-  { id: 'c008', name: 'Thomas Morales', age: 73, state: 'TX', carrier: 'Aetna', plan_name: 'Aetna Medicare Select PPO', enrollment_date: '2023-04-01', last_contact_date: '2026-06-14', urgency_score: 79 },
-  { id: 'c009', name: 'Linda Patel', age: 70, state: 'TX', carrier: 'Aetna', plan_name: 'Aetna Medicare Advantage HMO', enrollment_date: '2024-07-01', last_contact_date: '2026-08-01', urgency_score: 65 },
-  { id: 'c010', name: 'Charles Thompson', age: 88, state: 'TX', carrier: 'Aetna', plan_name: 'Aetna Medicare Eagle PPO', enrollment_date: '2022-01-15', last_contact_date: '2026-01-10', urgency_score: 100 },
-  { id: 'c011', name: 'Sandra Lee', age: 75, state: 'TX', carrier: 'Aetna', plan_name: 'Aetna Medicare Select PPO', enrollment_date: '2023-07-01', last_contact_date: '2026-05-30', urgency_score: 80 },
-  { id: 'c012', name: 'Joseph Rivera', age: 77, state: 'TX', carrier: 'Aetna', plan_name: 'Aetna Medicare Eagle PPO', enrollment_date: '2022-10-01', last_contact_date: '2026-04-22', urgency_score: 85 },
-  { id: 'c013', name: 'Margaret Brown', age: 65, state: 'TX', carrier: 'Aetna', plan_name: 'Aetna Medicare Advantage HMO', enrollment_date: '2026-01-01', last_contact_date: '2026-09-15', urgency_score: 58 },
-  { id: 'c014', name: 'David Garcia', age: 80, state: 'TX', carrier: 'Aetna', plan_name: 'Aetna Medicare Eagle PPO', enrollment_date: '2022-04-01', last_contact_date: '2026-03-01', urgency_score: 92 },
-  { id: 'c015', name: 'Nancy Walker', age: 72, state: 'TX', carrier: 'Aetna', plan_name: 'Aetna Medicare Select PPO', enrollment_date: '2023-01-01', last_contact_date: '2026-06-28', urgency_score: 76 },
-  { id: 'c016', name: 'Steven Okafor', age: 86, state: 'TX', carrier: 'Aetna', plan_name: 'Aetna Medicare Eagle PPO', enrollment_date: '2022-02-01', last_contact_date: '2026-02-14', urgency_score: 99 },
-  { id: 'c017', name: 'Karen Hernandez', age: 67, state: 'TX', carrier: 'Aetna', plan_name: 'Aetna Medicare Advantage HMO', enrollment_date: '2025-04-01', last_contact_date: '2026-08-20', urgency_score: 61 },
-  { id: 'c018', name: 'Paul Martinez', age: 74, state: 'TX', carrier: 'Aetna', plan_name: 'Aetna Medicare Select PPO', enrollment_date: '2023-10-01', last_contact_date: '2026-05-05', urgency_score: 83 },
-  { id: 'c019', name: 'Betty Yamamoto', age: 81, state: 'TX', carrier: 'Aetna', plan_name: 'Aetna Medicare Eagle PPO', enrollment_date: '2022-06-01', last_contact_date: '2026-01-25', urgency_score: 95 },
-  { id: 'c020', name: 'Kenneth Davis', age: 69, state: 'TX', carrier: 'Aetna', plan_name: 'Aetna Medicare Advantage HMO', enrollment_date: '2024-10-01', last_contact_date: '2026-07-10', urgency_score: 70 },
-  { id: 'c021', name: 'Helen Wilson', age: 83, state: 'TX', carrier: 'Aetna', plan_name: 'Aetna Medicare Eagle PPO', enrollment_date: '2022-09-01', last_contact_date: '2026-03-18', urgency_score: 93 },
-  { id: 'c022', name: 'Frank Tran', age: 76, state: 'TX', carrier: 'Aetna', plan_name: 'Aetna Medicare Select PPO', enrollment_date: '2023-05-01', last_contact_date: '2026-04-30', urgency_score: 82 },
-  { id: 'c023', name: 'Ruth Anderson', age: 71, state: 'TX', carrier: 'Aetna', plan_name: 'Aetna Medicare Advantage HMO', enrollment_date: '2024-04-01', last_contact_date: '2026-06-05', urgency_score: 77 },
+  { id: 'c001', name: 'Dorothy Castillo', age: 78, state: 'TX', county: 'Harris', carrier: 'Aetna', plan_name: 'Aetna Medicare Eagle PPO', enrollment_date: '2023-01-15', last_contact_date: '2026-03-12', urgency_score: 94 },
+  { id: 'c002', name: 'James Nguyen', age: 82, state: 'TX', county: 'Dallas', carrier: 'Aetna', plan_name: 'Aetna Medicare Eagle PPO', enrollment_date: '2022-11-01', last_contact_date: '2026-02-20', urgency_score: 91 },
+  { id: 'c003', name: 'Gloria Washington', age: 76, state: 'TX', county: 'Tarrant', carrier: 'Aetna', plan_name: 'Aetna Medicare Advantage HMO', enrollment_date: '2024-01-01', last_contact_date: '2026-04-05', urgency_score: 88 },
+  { id: 'c004', name: 'Robert Kim', age: 71, state: 'TX', county: 'Bexar', carrier: 'Aetna', plan_name: 'Aetna Medicare Select PPO', enrollment_date: '2023-10-15', last_contact_date: '2026-05-18', urgency_score: 84 },
+  { id: 'c005', name: 'Martha Rodriguez', age: 79, state: 'TX', county: 'Harris', carrier: 'Aetna', plan_name: 'Aetna Medicare Eagle PPO', enrollment_date: '2022-03-01', last_contact_date: '2026-01-30', urgency_score: 97 },
+  { id: 'c006', name: 'William Chen', age: 68, state: 'TX', county: 'Travis', carrier: 'Aetna', plan_name: 'Aetna Medicare Advantage HMO', enrollment_date: '2025-01-01', last_contact_date: '2026-07-22', urgency_score: 72 },
+  { id: 'c007', name: 'Barbara Johnson', age: 84, state: 'TX', county: 'Dallas', carrier: 'Aetna', plan_name: 'Aetna Medicare Eagle PPO', enrollment_date: '2022-07-01', last_contact_date: '2026-02-08', urgency_score: 96 },
+  { id: 'c008', name: 'Thomas Morales', age: 73, state: 'TX', county: 'Bexar', carrier: 'Aetna', plan_name: 'Aetna Medicare Select PPO', enrollment_date: '2023-04-01', last_contact_date: '2026-06-14', urgency_score: 79 },
+  { id: 'c009', name: 'Linda Patel', age: 70, state: 'TX', county: 'Harris', carrier: 'Aetna', plan_name: 'Aetna Medicare Advantage HMO', enrollment_date: '2024-07-01', last_contact_date: '2026-08-01', urgency_score: 65 },
+  { id: 'c010', name: 'Charles Thompson', age: 88, state: 'TX', county: 'Tarrant', carrier: 'Aetna', plan_name: 'Aetna Medicare Eagle PPO', enrollment_date: '2022-01-15', last_contact_date: '2026-01-10', urgency_score: 100 },
+  { id: 'c011', name: 'Sandra Lee', age: 75, state: 'TX', county: 'Dallas', carrier: 'Aetna', plan_name: 'Aetna Medicare Select PPO', enrollment_date: '2023-07-01', last_contact_date: '2026-05-30', urgency_score: 80 },
+  { id: 'c012', name: 'Joseph Rivera', age: 77, state: 'TX', county: 'Harris', carrier: 'Aetna', plan_name: 'Aetna Medicare Eagle PPO', enrollment_date: '2022-10-01', last_contact_date: '2026-04-22', urgency_score: 85 },
+  { id: 'c013', name: 'Margaret Brown', age: 65, state: 'TX', county: 'Travis', carrier: 'Aetna', plan_name: 'Aetna Medicare Advantage HMO', enrollment_date: '2026-01-01', last_contact_date: '2026-09-15', urgency_score: 58 },
+  { id: 'c014', name: 'David Garcia', age: 80, state: 'TX', county: 'Bexar', carrier: 'Aetna', plan_name: 'Aetna Medicare Eagle PPO', enrollment_date: '2022-04-01', last_contact_date: '2026-03-01', urgency_score: 92 },
+  { id: 'c015', name: 'Nancy Walker', age: 72, state: 'TX', county: 'Dallas', carrier: 'Aetna', plan_name: 'Aetna Medicare Select PPO', enrollment_date: '2023-01-01', last_contact_date: '2026-06-28', urgency_score: 76 },
+  { id: 'c016', name: 'Steven Okafor', age: 86, state: 'TX', county: 'Harris', carrier: 'Aetna', plan_name: 'Aetna Medicare Eagle PPO', enrollment_date: '2022-02-01', last_contact_date: '2026-02-14', urgency_score: 99 },
+  { id: 'c017', name: 'Karen Hernandez', age: 67, state: 'TX', county: 'Tarrant', carrier: 'Aetna', plan_name: 'Aetna Medicare Advantage HMO', enrollment_date: '2025-04-01', last_contact_date: '2026-08-20', urgency_score: 61 },
+  { id: 'c018', name: 'Paul Martinez', age: 74, state: 'TX', county: 'Bexar', carrier: 'Aetna', plan_name: 'Aetna Medicare Select PPO', enrollment_date: '2023-10-01', last_contact_date: '2026-05-05', urgency_score: 83 },
+  { id: 'c019', name: 'Betty Yamamoto', age: 81, state: 'TX', county: 'Harris', carrier: 'Aetna', plan_name: 'Aetna Medicare Eagle PPO', enrollment_date: '2022-06-01', last_contact_date: '2026-01-25', urgency_score: 95 },
+  { id: 'c020', name: 'Kenneth Davis', age: 69, state: 'TX', county: 'Travis', carrier: 'Aetna', plan_name: 'Aetna Medicare Advantage HMO', enrollment_date: '2024-10-01', last_contact_date: '2026-07-10', urgency_score: 70 },
+  { id: 'c021', name: 'Helen Wilson', age: 83, state: 'TX', county: 'Dallas', carrier: 'Aetna', plan_name: 'Aetna Medicare Eagle PPO', enrollment_date: '2022-09-01', last_contact_date: '2026-03-18', urgency_score: 93 },
+  { id: 'c022', name: 'Frank Tran', age: 76, state: 'TX', county: 'Bexar', carrier: 'Aetna', plan_name: 'Aetna Medicare Select PPO', enrollment_date: '2023-05-01', last_contact_date: '2026-04-30', urgency_score: 82 },
+  { id: 'c023', name: 'Ruth Anderson', age: 71, state: 'TX', county: 'Harris', carrier: 'Aetna', plan_name: 'Aetna Medicare Advantage HMO', enrollment_date: '2024-04-01', last_contact_date: '2026-06-05', urgency_score: 77 },
 ];
 
 // Remaining TX clients (17) — other carriers

@@ -1,25 +1,21 @@
-import { type Client, AFFECTED_CLIENT_IDS } from '../data/clients';
+import { type Client } from '../data/clients';
+import { type ScenarioId } from '../data/scenarios';
 import { buildDraft } from '../data/outreach';
 
 interface Props {
   withSpark: boolean;
-  clients: Client[];
-  onClientClick: (client: Client) => void;
+  affectedClients: Client[];
+  scenarioId: ScenarioId;
+  onDetailClick: (client: Client) => void;
+  onMessageClick: (client: Client) => void;
 }
 
-function getTemplateIndex(id: string): number {
-  return Array.from(AFFECTED_CLIENT_IDS).indexOf(id);
-}
-
-export default function SidePanel({ withSpark, clients, onClientClick }: Props) {
-  const affectedSorted = clients
-    .filter(c => AFFECTED_CLIENT_IDS.has(c.id))
-    .sort((a, b) => (b.urgency_score ?? 0) - (a.urgency_score ?? 0))
-    .slice(0, 3);
+export default function SidePanel({ withSpark, affectedClients, onDetailClick, onMessageClick }: Props) {
+  const topThree = affectedClients.slice(0, 3);
 
   return (
     <div className="flex flex-col gap-4 lg:w-80 xl:w-96 shrink-0">
-      {/* Counter cards */}
+      {/* Counter card */}
       <div className={`rounded-xl border p-5 transition-all duration-300 ${
         withSpark
           ? 'bg-blue-600 border-blue-700 text-white'
@@ -63,15 +59,14 @@ export default function SidePanel({ withSpark, clients, onClientClick }: Props) 
         <div className="flex flex-col gap-3">
           <div className="flex items-center justify-between">
             <p className="text-sm font-semibold text-gray-700">
-              AI flagged 23 clients at risk
+              AI flagged {affectedClients.length} clients at risk
             </p>
             <span className="text-xs text-blue-600 bg-blue-50 px-2 py-0.5 rounded-full font-medium">
               Top 3 by urgency
             </span>
           </div>
 
-          {affectedSorted.map((client) => {
-            const idx = getTemplateIndex(client.id);
+          {topThree.map((client, idx) => {
             const { subject, body } = buildDraft(client.name, client.plan_name, idx);
             const score = client.urgency_score ?? 0;
             const scoreColor =
@@ -82,23 +77,27 @@ export default function SidePanel({ withSpark, clients, onClientClick }: Props) 
                 : 'bg-yellow-100 text-yellow-700';
 
             return (
-              <button
-                key={client.id}
-                onClick={() => onClientClick(client)}
-                className="text-left w-full bg-white rounded-xl border border-gray-200 p-4 hover:border-blue-300 hover:shadow-sm transition-all group"
-              >
+              <div key={client.id} className="bg-white rounded-xl border border-gray-200 p-4 hover:border-blue-200 hover:shadow-sm transition-all">
                 <div className="flex items-center justify-between mb-2">
-                  <span className="text-sm font-semibold text-gray-900">{client.name}</span>
+                  <button
+                    onClick={() => onDetailClick(client)}
+                    className="text-sm font-semibold text-gray-900 hover:text-blue-700 transition-colors text-left"
+                  >
+                    {client.name}
+                  </button>
                   <span className={`text-xs font-bold px-2 py-0.5 rounded-full ${scoreColor}`}>
                     {score}
                   </span>
                 </div>
                 <p className="text-xs font-medium text-gray-600 mb-1 truncate">{subject}</p>
                 <p className="text-xs text-gray-400 line-clamp-2">{body.slice(0, 110)}…</p>
-                <p className="text-xs text-blue-500 mt-2 group-hover:text-blue-700 transition-colors">
-                  Click to view full draft →
-                </p>
-              </button>
+                <button
+                  onClick={() => onMessageClick(client)}
+                  className="text-xs text-blue-500 mt-2 hover:text-blue-700 transition-colors block"
+                >
+                  View full draft →
+                </button>
+              </div>
             );
           })}
         </div>
@@ -106,22 +105,17 @@ export default function SidePanel({ withSpark, clients, onClientClick }: Props) 
         <div className="bg-white rounded-xl border border-gray-200 p-5">
           <p className="text-sm font-semibold text-gray-700 mb-2">Your starting point</p>
           <div className="space-y-2 text-sm text-gray-500">
-            <div className="flex items-start gap-2">
-              <span className="mt-0.5 text-gray-300">1.</span>
-              <span>Open spreadsheet. Filter by State = TX.</span>
-            </div>
-            <div className="flex items-start gap-2">
-              <span className="mt-0.5 text-gray-300">2.</span>
-              <span>Filter by Carrier = Aetna. Find ~23 rows.</span>
-            </div>
-            <div className="flex items-start gap-2">
-              <span className="mt-0.5 text-gray-300">3.</span>
-              <span>Manually sort by "last contact" to prioritize.</span>
-            </div>
-            <div className="flex items-start gap-2">
-              <span className="mt-0.5 text-gray-300">4.</span>
-              <span>Draft outreach one by one. Hope you finish before AEP closes.</span>
-            </div>
+            {[
+              'Open spreadsheet. Filter by State = TX.',
+              'Filter by Carrier = Aetna. Find ~23 rows.',
+              'Manually sort by "last contact" to prioritize.',
+              'Draft outreach one by one. Hope you finish before AEP closes.',
+            ].map((step, i) => (
+              <div key={i} className="flex items-start gap-2">
+                <span className="mt-0.5 text-gray-300 shrink-0">{i + 1}.</span>
+                <span>{step}</span>
+              </div>
+            ))}
           </div>
           <p className="mt-4 text-xs text-red-500 font-medium">
             3 clients will be missed before you finish.

@@ -1,17 +1,18 @@
-import { type Client, AFFECTED_CLIENT_IDS } from '../data/clients';
+import { type Client } from '../data/clients';
 
 interface Props {
   clients: Client[];
   withSpark: boolean;
+  affectedIds: Set<string>;
   onCardClick: (client: Client) => void;
 }
 
-export default function ClientCard({ clients, withSpark, onCardClick }: Props) {
+export default function ClientCard({ clients, withSpark, affectedIds, onCardClick }: Props) {
   return (
     <div className="grid grid-cols-1 gap-2">
       {clients.map(client => {
-        const isAffected = withSpark && AFFECTED_CLIENT_IDS.has(client.id);
-        const isNonAffected = withSpark && !AFFECTED_CLIENT_IDS.has(client.id);
+        const isAffected = withSpark && affectedIds.has(client.id);
+        const isNonAffected = withSpark && !affectedIds.has(client.id);
 
         return (
           <div

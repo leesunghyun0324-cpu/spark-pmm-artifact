@@ -1,12 +1,13 @@
-import { type Client, AFFECTED_CLIENT_IDS } from '../data/clients';
+import { type Client } from '../data/clients';
 
 interface Props {
   clients: Client[];
   withSpark: boolean;
+  affectedIds: Set<string>;
   onRowClick: (client: Client) => void;
 }
 
-export default function ClientTable({ clients, withSpark, onRowClick }: Props) {
+export default function ClientTable({ clients, withSpark, affectedIds, onRowClick }: Props) {
   return (
     <div className="overflow-x-auto rounded-xl border border-gray-200 bg-white scrollbar-thin">
       <table className="w-full text-sm border-collapse">
@@ -25,8 +26,8 @@ export default function ClientTable({ clients, withSpark, onRowClick }: Props) {
         </thead>
         <tbody>
           {clients.map((client, i) => {
-            const isAffected = withSpark && AFFECTED_CLIENT_IDS.has(client.id);
-            const isNonAffected = withSpark && !AFFECTED_CLIENT_IDS.has(client.id);
+            const isAffected = withSpark && affectedIds.has(client.id);
+            const isNonAffected = withSpark && !affectedIds.has(client.id);
 
             return (
               <tr

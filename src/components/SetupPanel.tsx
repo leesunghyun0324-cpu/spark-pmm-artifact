@@ -49,7 +49,7 @@ export default function SetupPanel({ simulatorRef }: Props) {
         {/* CTA */}
         <button
           onClick={scrollToSimulator}
-          className="inline-flex items-center gap-2 bg-blue-600 hover:bg-blue-700 active:bg-blue-800 text-white font-semibold px-7 py-3.5 rounded-xl text-base transition-colors shadow-sm"
+          className="inline-flex items-center gap-2 bg-blue-600 hover:bg-blue-700 active:bg-blue-800 hover:-translate-y-px active:translate-y-px hover:shadow-md text-white font-semibold px-7 py-3.5 rounded-xl text-base transition-all duration-150 shadow-sm"
         >
           Run the Simulation
           <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
@@ -64,10 +64,11 @@ export default function SetupPanel({ simulatorRef }: Props) {
             '5 states',
             '23 TX-Aetna clients affected',
             '54-day AEP window',
-          ].map(label => (
+          ].map((label, i) => (
             <span
               key={label}
-              className="text-xs font-medium text-gray-500 bg-white border border-gray-200 px-3 py-1.5 rounded-full"
+              className="text-xs font-medium text-gray-500 bg-white border border-gray-200 px-3 py-1.5 rounded-full fade-up"
+              style={{ animationDelay: `${i * 80}ms` }}
             >
               {label}
             </span>
