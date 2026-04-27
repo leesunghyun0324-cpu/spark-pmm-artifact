@@ -174,7 +174,7 @@ export default function BehindArtifactPanel() {
             {/* Quote */}
             <div className="mx-6 mb-5 bg-gray-50 rounded-lg border border-gray-200 px-5 py-4">
               <p className="text-sm text-gray-700 italic leading-relaxed">
-                "We had 31 clients on a UHC plan that dropped Eliquis. Without Spark, I wouldn't have known until clients started calling me. Instead, I had personalized outreach drafted and sent to all 31 within the same morning."
+                "We had 23 clients on Aetna plans that wouldn't be available in Texas next year. Without Spark, I would have learned about it the same week my clients did — from a letter in their mailbox. Instead, I had personalized outreach drafted and sent to all 23 within four minutes of the announcement. Not a single one shopped elsewhere."
               </p>
               <p className="text-xs text-gray-400 mt-2">— Independent broker, 280-client book (illustrative)</p>
             </div>

@@ -1,11 +1,9 @@
 import { type Client } from '../data/clients';
-import { type ScenarioId } from '../data/scenarios';
 import { buildDraft } from '../data/outreach';
 
 interface Props {
   withSpark: boolean;
   affectedClients: Client[];
-  scenarioId: ScenarioId;
   onDetailClick: (client: Client) => void;
   onMessageClick: (client: Client) => void;
 }
